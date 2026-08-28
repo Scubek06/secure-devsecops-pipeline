@@ -1,26 +1,26 @@
-import os
-import subprocess
 import hashlib
+import subprocess
 
 
 def run_command(user_input):
-    command = "echo " + user_input
-    return os.system(command)
+    result = subprocess.run(
+        ["echo", user_input],
+        capture_output=True,
+        text=True,
+        check=True
+    )
+    return result.stdout.strip()
 
 
-def execute_command(user_input):
-    return subprocess.call(user_input, shell=True)
-
-
-def weak_hash(password):
-    return hashlib.md5(password.encode()).hexdigest()
+def secure_hash(password):
+    return hashlib.sha256(password.encode()).hexdigest()
 
 
 if __name__ == "__main__":
-    user_input = input("Enter command: ")
+    user_input = input("Enter text: ")
 
     print("Command result:")
-    run_command(user_input)
+    print(run_command(user_input))
 
-    print("MD5 hash:")
-    print(weak_hash(user_input))
+    print("SHA-256 hash:")
+    print(secure_hash(user_input))
